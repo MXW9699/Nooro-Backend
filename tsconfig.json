@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+      "target": "ES6",                         
+      "module": "NodeNext",                     
+      "strict": true,                           
+      "esModuleInterop": true,                  
+      "skipLibCheck": true,                     
+      "forceConsistentCasingInFileNames": true, 
+      "moduleResolution": "nodenext",
+      "outDir": "./dist",                       
+      "rootDir": "./src",                                   
+      "lib": ["ES6", "DOM"],                    
+      "baseUrl": ".",                           
+      "paths": {                                
+        "@src/*": ["src/*"]
+      }
+    },
+    "include": [
+      "src/**/*.ts"                             
+    ],
+    "exclude": [
+      "node_modules",                           
+      "dist"                                    
+    ]
+  }
+  

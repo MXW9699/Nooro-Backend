@@ -1,0 +1,17 @@
+version: '1'
+volumes:
+  mySQL-dev:
+services:
+  mySQL:
+    image: mysql
+    restart: always
+    volumes:
+      - mySQL-dev:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'devPassword'
+      MYSQL_ROOT_PASSWORD: 'rootPassword'
+    ports:
+      - '3306:3306'
+    
