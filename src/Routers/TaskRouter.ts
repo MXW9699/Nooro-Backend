@@ -1,35 +1,47 @@
 import express, { Request , Response} from 'express'
 import { StatusCodes } from 'http-status-codes';
 import {PrismaClient, type Task} from '@prisma/client'
+import { v4 as uuidv4 } from 'uuid';
 export const taskRouter = express()
 
 const db = new PrismaClient()
-const { v4: uuidv4 } = require('uuid');
 
 ///get tasks
-taskRouter.get('/', (_: Request, res: Response) => {
-    res.status(StatusCodes.OK).json({ data: 'get list of tasks' });  
+taskRouter.get('/', async (_: Request, res: Response) => {
+try{
+  const tasks = await db.task.findMany()
+  res.status(StatusCodes.OK).json({ data: tasks });
+}
+catch(e){
+  res.status(StatusCodes.BAD_REQUEST).json({data:e})
+}  
   });
 
 //POST /TASKS
-taskRouter.post('/', async (_: Request, res: Response) => {
+taskRouter.post('/', async (req: Request, res: Response) => {
     try{
 // Generate custom UUID (with the 'table.' prefix)
-const customUUID = 'task.' + uuidv4().replace(/-/g, '');
-    await db.task.create({data:{id: customUUID,name:''}})
-    res.status(StatusCodes.OK).json({ data: 'post of tasks' }); }
+    const customUUID = 'task.' + uuidv4().replace(/-/g, '');
+    const {title, color} = req.body
+    const data = await db.task.create({data:{id: customUUID,title,color}})
+    res.status(StatusCodes.OK).json({ data}); }
     catch(e){
     res.status(StatusCodes.BAD_REQUEST).json({data:e})}
 })
 
 //PUT /TASKS
-taskRouter.put('/:id', (_: Request, res: Response) => {
-    res.status(StatusCodes.OK).json({ data: 'edit list of tasks' });  
+taskRouter.put('/:id', async (req: Request, res: Response) => {
+    const {title,color,completed} = req.body
+    const {id} = req.params
+    const data = await db.task.update({where: {id }, data:{title,color,completed}})
+    res.status(StatusCodes.OK).json({ data });  
   });
 
 //DELETE /TASKS
-taskRouter.delete('/:id', (_: Request, res: Response) => {
-    res.status(StatusCodes.OK).json({ data: 'delete list of tasks' });  
+taskRouter.delete('/:id', async (req: Request, res: Response) => {
+  const {id} = req.params
+  const data = await db.task.delete({where: {id }})
+    res.status(StatusCodes.OK).json({ data });  
   });
 
 

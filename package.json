@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsc && node dist/server.js",
-    "build": "tsc"
+    "build": "tsc",
+    "dev": "nodemon --exec ts-node src/server.ts"
   },
   "repository": {
     "type": "git",
@@ -25,9 +26,11 @@
     "eslint": "^9.19.0",
     "express": "^4.21.2",
     "http-status-codes": "^2.3.0",
+    "nodemon": "^3.1.9",
     "pnpm": "^9.15.4",
     "prettier": "^3.4.2",
     "prisma": "^6.2.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5.7.3",
     "uuid": "^11.0.5"
   }
