@@ -3,19 +3,22 @@ import { v4 as uuidv4 } from "uuid";
 
 const db = new PrismaClient();
 
-export async function getTask(id:string) {
-  const task = await db.task.findFirst({where:{id}});
-  return {task}
+export async function getTask(id: string): Promise<{ task: Task | null }> {
+  const task = await db.task.findFirst({ where: { id } });
+  return { task };
 }
 
-export async function getAllTasks(): Promise<{tasks:Task[] , completedCount:number}> {
+export async function getAllTasks(): Promise<{
+  tasks: Task[];
+  completedCount: number;
+}> {
   const tasks = await db.task.findMany();
   const completedCount = await db.task.count({
     where: {
       completed: true,
     },
   });
-  return {completedCount, tasks}
+  return { completedCount, tasks };
 }
 
 export async function createTask({
@@ -44,7 +47,6 @@ export async function editTask({
   color?: string;
   completed?: boolean;
 }): Promise<Task> {
-  console.log(id,title,color,completed)
   const task = await db.task.update({
     where: { id },
     data: { title, color, completed },
@@ -52,6 +54,7 @@ export async function editTask({
   return task;
 }
 
-export async function deleteTask(id: string) {
-  await db.task.delete({ where: { id } });
+export async function deleteTask(id: string): Promise<{ task: Task }> {
+  const task = await db.task.delete({ where: { id } });
+  return { task };
 }
